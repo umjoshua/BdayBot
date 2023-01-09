@@ -1,13 +1,20 @@
 from dotenv import load_dotenv
-import os 
-import telegram.ext
+import os
+from telegram.ext import *
+from handlers import handlers
 
 load_dotenv()
 
-token = os.getenv("TOKEN")
-bot = telegram.Bot(token=token)
+application = Application.builder().token(os.getenv("TOKEN")).build()
+application.add_handler(CommandHandler("start", handlers.start))
 
-startMessage = "Hello, Type /new to create new reminder!"
+convHandler = application.add_handler(ConversationHandler(
+    entry_points=[CommandHandler("new",handlers.newReminder)],
+    states={
+        1: [MessageHandler(filters.Text,handlers.getName)],
+        2: [MessageHandler(filters.Text,handlers.getDate)],
+    },
+    fallbacks=[CommandHandler("cancel",handlers.cancel)],
+))
 
-updater = telegram.ext.Updater(token,use_context=True)
-dispatcher = updater.dispatcher
+application.run_polling()
