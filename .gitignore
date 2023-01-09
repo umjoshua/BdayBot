@@ -95,3 +95,6 @@ venv.bak/
 
 # mkdocs documentation
 /site
+
+# database
+database/database.db
