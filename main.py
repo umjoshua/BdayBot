@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 import os
 from telegram.ext import *
 from handlers import handlers
+import threading
+import time
 
 load_dotenv()
 
@@ -16,5 +18,14 @@ convHandler = application.add_handler(ConversationHandler(
     },
     fallbacks=[CommandHandler("cancel",handlers.cancel)],
 ))
+
+def remind(set):
+    while True:
+        print(set)
+        time.sleep(10)  
+
+
+remindThread = threading.Thread(target=remind,args=('one',))
+remindThread.start()
 
 application.run_polling()
