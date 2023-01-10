@@ -1,3 +1,5 @@
+import sqlite3
+
 startMessage = """
     Welcome!
     /new : create new reminder
@@ -5,11 +7,20 @@ startMessage = """
 """
 new = "Whose birthday should I remember?"
 
+conn = sqlite3.connect("database/database.db")
+cursor = conn.cursor()
+
+
 name = None
 date = None
 
 async def start(update, context):
     await update.message.reply_text(startMessage)
+    chatId = update.message.chat_id
+    res = cursor.execute("SELECT * FROM users where userId  = ?",(chatId, ))
+    if not res.fetchone():
+       cursor.execute("INSERT INTO users VALUES (?)",(chatId,))
+       print('no')
 
 async def newReminder(update, context):
     await update.message.reply_text("Whose birthday should I remember?")
