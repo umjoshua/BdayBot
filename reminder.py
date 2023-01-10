@@ -25,6 +25,6 @@ async def remind():
             bdayName = row[2]
             text = "Hey! It's "+ bdayName + "'s birthday today... Wish him!"
             await application.updater.bot.send_message(chat_id=chatId,text=text)
-        time.sleep(10)
+        time.sleep(60*60*24)
 
 asyncio.run(remind())
