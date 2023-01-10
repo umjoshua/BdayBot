@@ -20,11 +20,12 @@ async def remind():
         cursor.execute("SELECT * FROM birthday_reminder WHERE date = ?",(str(today),))
         conn.commit()
         res = cursor.fetchall()
-        for row in res:
-            chatId = row[3]
-            bdayName = row[2]
-            text = "Hey! It's "+ bdayName + "'s birthday today... Wish him!"
-            await application.updater.bot.send_message(chat_id=chatId,text=text)
+        if cursor.fetchone():
+            for row in res:
+                chatId = row[3]
+                bdayName = row[2]
+                text = "Hey! It's "+ bdayName + "'s birthday today... Wish him!"
+                await application.updater.bot.send_message(chat_id=chatId,text=text)
         time.sleep(60*60*24)
 
 asyncio.run(remind())
