@@ -19,7 +19,6 @@ convHandler = application.add_handler(ConversationHandler(
     states={
         1: [MessageHandler(filters.TEXT,handlers.getName)],
         2: [MessageHandler(filters.TEXT,handlers.getDate)],
-        3: [MessageHandler(filters.TEXT,handlers.start)],
     },
     fallbacks=[CommandHandler("cancel",cancel)],
 ))
