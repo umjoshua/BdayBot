@@ -17,29 +17,29 @@ chatId = None
 
 def setMonth(num):
     match(num):
-        case 1:
+        case '01':
             return 'January'
-        case 2:
+        case '02':
             return 'February'
-        case 3:
+        case '03':
             return 'March'
-        case 4:
+        case '04':
             return 'April'
-        case 5:
+        case '05':
             return 'May'
-        case 6:
+        case '06':
             return 'June'
-        case 7:
+        case '07':
             return 'July'
-        case 8:
+        case '08':
             return 'August'
-        case 9:
+        case '09':
             return 'September'
-        case 10:
+        case '10':
             return 'October'
-        case 11:
+        case '11':
             return 'November'
-        case 12:
+        case '12':
             return 'December'
 
 
@@ -69,7 +69,7 @@ async def getDate(update, context):
     date = update.message.text
     try:
         cursor.execute(
-            "INSERT INTO birthday_reminder (date, name, userId) VALUES(?,?,?,?)", (date, name, chatId))
+            "INSERT INTO birthday_reminder (date, name, userId) VALUES(?,?,?)", (date, name, chatId))
         conn.commit()
     except:
         await update.message.reply_text("Couldn't add. Start over with /start")
@@ -86,5 +86,8 @@ async def viewReminders(update, context):
     res = cursor.fetchall()
     text = ""
     for row in res:
-        text += "Name: " + row[2] + " DOB: " + row[1][0:2] + " " + setMonth(int(row[1][3:])) + "\n"
-    await update.message.reply_text(text)
+        text += row[2] + " - "  +  setMonth(row[1][3:]) + " " + row[1][0:2] + "\n"
+    if text!="":
+        await update.message.reply_text(text)
+    else:
+        await update.message.reply_text("No reminders found")
