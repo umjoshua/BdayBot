@@ -7,25 +7,29 @@ import time
 
 load_dotenv()
 
+async def cancel(update,context):
+    await update.message.reply_text("Cancelled!")
+    return ConversationHandler.END
+
 application = Application.builder().token(os.getenv("TOKEN")).build()
 application.add_handler(CommandHandler("start", handlers.start))
 
 convHandler = application.add_handler(ConversationHandler(
     entry_points=[CommandHandler("new",handlers.newReminder)],
     states={
-        1: [MessageHandler(filters.Text,handlers.getName)],
-        2: [MessageHandler(filters.Text,handlers.getDate)],
+        1: [MessageHandler(filters.TEXT,handlers.getName)],
+        2: [MessageHandler(filters.TEXT,handlers.getDate)],
+        3: [MessageHandler(filters.TEXT,handlers.start)],
     },
-    fallbacks=[CommandHandler("cancel",handlers.cancel)],
+    fallbacks=[CommandHandler("cancel",cancel)],
 ))
 
-def remind(set):
+def remind():
     while True:
-        print(set)
         time.sleep(10)  
 
 
-remindThread = threading.Thread(target=remind,args=('one',))
+remindThread = threading.Thread(target=remind)
 remindThread.start()
 
 application.run_polling()

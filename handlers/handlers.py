@@ -5,19 +5,24 @@ startMessage = """
 """
 new = "Whose birthday should I remember?"
 
+name = None
+date = None
+
 async def start(update, context):
     await update.message.reply_text(startMessage)
 
 async def newReminder(update, context):
-    await update.message.reply_text(new)
+    await update.message.reply_text("Whose birthday should I remember?")
     return 1
 
 async def getName(update, context):
-    await update.message.replay_text(new)
-    # print('getName called')
+    global name
+    name = update.message.text
+    await update.message.reply_text("Enter DOB. (DD-MM)")
+    return 2
 
 async def getDate(update, context):
-    await update.message.replay_text(new)
-
-async def cancel(update,context):
-    await update.message.replay_text("Cancelled!")
+    global date
+    date = update.message.text
+    await update.message.reply_text("I will remind you!")
+    return 3
