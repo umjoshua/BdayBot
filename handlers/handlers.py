@@ -69,7 +69,7 @@ async def getDate(update, context):
     date = update.message.text
     try:
         cursor.execute(
-            "INSERT INTO birthday_reminder (date, name, flag, userId) VALUES(?,?,?,?)", (date, name, 0, chatId))
+            "INSERT INTO birthday_reminder (date, name, userId) VALUES(?,?,?,?)", (date, name, chatId))
         conn.commit()
     except:
         await update.message.reply_text("Couldn't add. Start over with /start")
